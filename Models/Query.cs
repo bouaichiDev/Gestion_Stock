@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -10,8 +11,8 @@ namespace Gestion_Stock.Models
 {
     public class Query
     {
-        public SqlCommand _command;
-        public SqlDataAdapter _dataAdapter;
+        public MySqlCommand _command;
+        public MySqlDataAdapter _dataAdapter;
 
         public Query(Boolean open = true)
         {
@@ -31,9 +32,9 @@ namespace Gestion_Stock.Models
 
             try
             {
-                using (SqlConnection _sqlConnection = new SqlConnection(Configs._urlServer))
+                using (MySqlConnection _sqlConnection = new MySqlConnection(Configs._urlServer))
                 {
-                    _command = new SqlCommand(sql, _sqlConnection);
+                    _command = new MySqlCommand(sql, _sqlConnection);
                     _sqlConnection.Open();
                     returnVal = _command.ExecuteNonQuery();
                 }
@@ -53,9 +54,9 @@ namespace Gestion_Stock.Models
 
             try
             {
-                using (SqlConnection _sqlConnection = new SqlConnection(Configs._urlServer))
+                using (MySqlConnection _sqlConnection = new MySqlConnection(Configs._urlServer))
                 {
-                    _command = new SqlCommand();
+                    _command = new MySqlCommand();
                     _command.CommandType = CommandType.StoredProcedure;
                     _command.Connection = _sqlConnection;
                     _command.CommandText = name;
@@ -71,31 +72,31 @@ namespace Gestion_Stock.Models
                             {
                                 if (valPrm[2] == "")
                                 {
-                                    _command.Parameters.Add("@" + valPrm[0], SqlDbType.DateTime).Value = DBNull.Value;
+                                    _command.Parameters.AddWithValue("?" + valPrm[0], DBNull.Value);//.Value = DBNull.Value;
                                 }
                                 else
                                 {
-                                    _command.Parameters.Add("@" + valPrm[0], SqlDbType.DateTime).Value = Convert.ToDateTime(valPrm[2]);
+                                    _command.Parameters.AddWithValue("?" + valPrm[0], Convert.ToDateTime(valPrm[2]));//.Value = Convert.ToDateTime(valPrm[2]);
                                 }
                             }
                             else if (valPrm[1] == "string")
                             {
-                                _command.Parameters.Add("@" + valPrm[0], SqlDbType.NVarChar).Value = valPrm[2];
+                                _command.Parameters.AddWithValue("?" + valPrm[0], valPrm[2]);//.Value = valPrm[2];
                             }
                             else if (valPrm[1] == "int")
                             {
                                 if (valPrm[2].Trim() == "") valPrm[2] = "0";
-                                _command.Parameters.Add("@" + valPrm[0], SqlDbType.BigInt).Value = valPrm[2];
+                                _command.Parameters.AddWithValue("?" + valPrm[0], valPrm[2]);
                             }
                             else if (valPrm[1] == "double" || valPrm[1] == "float")
                             {
                                 if (valPrm[2].Trim() == "") valPrm[2] = "0";
-                                _command.Parameters.Add("@" + valPrm[0], SqlDbType.Float).Value = double.Parse(valPrm[2]);
+                                _command.Parameters.AddWithValue("?" + valPrm[0], double.Parse(valPrm[2]));
                             }
                         }
                     }
 
-                    _dataAdapter = new SqlDataAdapter(_command);
+                    _dataAdapter = new MySqlDataAdapter(_command);
                     _dataAdapter.Fill(dt);
 
                 }
@@ -114,9 +115,9 @@ namespace Gestion_Stock.Models
 
             try
             {
-                using (SqlConnection _sqlConnection = new SqlConnection(Configs._urlServer))
+                using (MySqlConnection _sqlConnection = new MySqlConnection(Configs._urlServer))
                 {
-                    _command = new SqlCommand();
+                    _command = new MySqlCommand();
                     _command.CommandType = CommandType.StoredProcedure;
                     _command.Connection = _sqlConnection;
                     _command.CommandText = name;
@@ -156,7 +157,7 @@ namespace Gestion_Stock.Models
                         }
                     }
 
-                    _dataAdapter = new SqlDataAdapter(_command);
+                    _dataAdapter = new MySqlDataAdapter(_command);
                     _dataAdapter.Fill(dt);
                 }
             }
@@ -193,9 +194,9 @@ namespace Gestion_Stock.Models
             DataTable dt = new DataTable();
             try
             {
-                using (SqlConnection _sqlConnection = new SqlConnection(Configs._urlServer))
+                using (MySqlConnection _sqlConnection = new MySqlConnection(Configs._urlServer))
                 {
-                    _dataAdapter = new SqlDataAdapter(sql, _sqlConnection);
+                    _dataAdapter = new MySqlDataAdapter(sql, _sqlConnection);
                     DataSet ds = new DataSet();
                     _dataAdapter.Fill(dt);
                 }
@@ -214,9 +215,9 @@ namespace Gestion_Stock.Models
 
             try
             {
-                using (SqlConnection _sqlConnection = new SqlConnection(Configs._urlServer))
+                using (MySqlConnection _sqlConnection = new MySqlConnection(Configs._urlServer))
                 {
-                    _command = new SqlCommand(sql, _sqlConnection);
+                    _command = new MySqlCommand(sql, _sqlConnection);
                     _sqlConnection.Open();
                     Object obj = _command.ExecuteScalar();
                     val = (obj == null) ? "" : ((obj.ToString() == null) ? "" : _command.ExecuteScalar().ToString());
@@ -238,14 +239,14 @@ namespace Gestion_Stock.Models
         public DataSet executeProcPlus(string name, string parameters = "", Boolean open = false, char spliter = '@', char spliter2 = '#')
         {
             DataSet ds = null;
-            using (SqlConnection Con = new SqlConnection(Configs._urlServer))
+            using (MySqlConnection Con = new MySqlConnection(Configs._urlServer))
             {
 
-                SqlCommand _command;
-                SqlDataAdapter _dataAdapter;
+                MySqlCommand _command;
+                MySqlDataAdapter _dataAdapter;
                 try
                 {
-                    _command = new SqlCommand();
+                    _command = new MySqlCommand();
 
                     _command.CommandTimeout = 380;
                     _command.CommandType = CommandType.StoredProcedure;
@@ -292,7 +293,7 @@ namespace Gestion_Stock.Models
                         }
                     }
 
-                    _dataAdapter = new SqlDataAdapter(_command);
+                    _dataAdapter = new MySqlDataAdapter(_command);
                     ds = new DataSet();
 
                     _dataAdapter.Fill(ds);
@@ -315,12 +316,12 @@ namespace Gestion_Stock.Models
         public DataSet executeSqlPlus(string sql, Boolean open = false)
         {
             DataSet ds = null;
-            using (SqlConnection Con = new SqlConnection(Configs._urlServer))
+            using (MySqlConnection Con = new MySqlConnection(Configs._urlServer))
             {
-                SqlDataAdapter _dataAdapter;
+                MySqlDataAdapter _dataAdapter;
                 try
                 {
-                    _dataAdapter = new SqlDataAdapter(sql, Con);
+                    _dataAdapter = new MySqlDataAdapter(sql, Con);
 
                     ds = new DataSet();
                     _dataAdapter.Fill(ds);

@@ -8,12 +8,14 @@ namespace Gestion_Stock
 {
     static class Program
     {
+        public static Models.Query query = new Models.Query();
         /// <summary>
         /// Point d'entrée principal de l'application.
         /// </summary>
         [STAThread]
         static void Main()
         {
+            
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Login());

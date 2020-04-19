@@ -29,30 +29,52 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Login));
-            this.button1 = new System.Windows.Forms.Button();
+            this.cnx = new System.Windows.Forms.Button();
+            this.username = new System.Windows.Forms.TextBox();
+            this.password = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
-            // button1
+            // cnx
             // 
-            resources.ApplyResources(this.button1, "button1");
-            this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.button1.Name = "button1";
-            this.button1.UseVisualStyleBackColor = true;
+            this.cnx.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(148)))), ((int)(((byte)(218)))));
+            this.cnx.FlatAppearance.BorderSize = 0;
+            resources.ApplyResources(this.cnx, "cnx");
+            this.cnx.ForeColor = System.Drawing.Color.White;
+            this.cnx.Name = "cnx";
+            this.cnx.UseVisualStyleBackColor = false;
+            this.cnx.Click += new System.EventHandler(this.cnx_Click);
+            // 
+            // username
+            // 
+            resources.ApplyResources(this.username, "username");
+            this.username.Name = "username";
+            // 
+            // password
+            // 
+            resources.ApplyResources(this.password, "password");
+            this.password.Name = "password";
             // 
             // Login
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.button1);
+            this.BackgroundImage = global::Gestion_Stock.Properties.Resources.login;
+            this.Controls.Add(this.password);
+            this.Controls.Add(this.username);
+            this.Controls.Add(this.cnx);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Login";
+            this.Load += new System.EventHandler(this.Login_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button cnx;
+        private System.Windows.Forms.TextBox username;
+        private System.Windows.Forms.TextBox password;
     }
 }
 

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Windows.Forms;
 
 namespace Gestion_Stock.Models
 {
@@ -48,7 +49,7 @@ namespace Gestion_Stock.Models
             string res = "";
             try
             {
-                string file = HttpContext.Current.Server.MapPath("~/Config") + "/Config.dat";
+                string file = Application.StartupPath + "/Config/Config.data";
                 StreamReader sr = new StreamReader(file);
                 res = Cryptage.Decrypt(sr.ReadLine());
                 sr.Close();
