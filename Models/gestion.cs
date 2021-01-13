@@ -18,18 +18,41 @@ namespace Gestion_Stock.Models
             if(data.Count>1)
             foreach(var col in data)
             {
-                    column = "[" + col.name + "],";
+                    column += "`" + col.name + "`,";
 
                     value += ParseColumn(col.type, col.valeur)+",";
                // sql += col.name + "@" + col.type + "@" + col.valeur+"#";
                  
             }
-            column.Remove(column.Length - 1, 1);
-            value.Remove(value.Length - 1, 1);
+            column= column.Remove(column.Length - 1, 1);
+            value = value.Remove(value.Length - 1, 1);
             sql += column;
-            sql += ") VALUES ("+value+")";
+            sql += ") VALUES ("+value+ "); SELECT LAST_INSERT_ID();";
             DataTable dt= query.executeSql(sql);
             
+            return dt;
+        }
+        public DataTable Update(string tab, List<data_> data, string user, string WHERE)
+        {
+
+            string sql = "UPDATE " + tab + " SET ";
+            string column = "";
+              
+            if (data.Count >= 1)
+                foreach (var col in data)
+                {
+                    column += "`" + col.name + "`=" + ParseColumn(col.type, col.valeur)+",";
+
+                   // value += ParseColumn(col.type, col.valeur) + ",";
+                    // sql += col.name + "@" + col.type + "@" + col.valeur+"#";
+
+                }
+            column = column.Remove(column.Length - 1, 1);
+            //WHERE = WHERE.Remove(WHERE.Length - 1, 1);
+            sql += column+"  WHERE "+WHERE;
+           // sql += ") VALUES (" + value + "); SELECT LAST_INSERT_ID();";
+            DataTable dt = query.executeSql(sql);
+
             return dt;
         }
         public string ParseColumn(string type,string valeur)

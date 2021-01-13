@@ -46,6 +46,7 @@
             // 
             // username
             // 
+            this.username.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.username, "username");
             this.username.Name = "username";
             // 

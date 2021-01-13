@@ -12,7 +12,7 @@ namespace Gestion_Stock.Models
     public class Query
     {
         public MySqlCommand _command;
-        public MySqlDataAdapter _dataAdapter;
+        public MySqlDataReader _dataReader;
 
         public Query(Boolean open = true)
         {
@@ -54,7 +54,7 @@ namespace Gestion_Stock.Models
 
             try
             {
-                using (MySqlConnection _sqlConnection = new MySqlConnection(Configs._urlServer))
+                using (MySqlConnection _sqlConnection = new MySqlConnection("server=localhost; user id=root; password=; database=gs_stock; pooling=false;"))
                 {
                     _command = new MySqlCommand();
                     _command.CommandType = CommandType.StoredProcedure;
@@ -95,10 +95,13 @@ namespace Gestion_Stock.Models
                             }
                         }
                     }
-
-                    _dataAdapter = new MySqlDataAdapter(_command);
-                    _dataAdapter.Fill(dt);
-
+                    _command.Connection.Open();
+                  
+                   
+                     _command.CommandTimeout = 120;
+                    _dataReader= _command.ExecuteReader(); //(_command);
+                    dt.Load(_dataReader);
+               
                 }
             }
             catch (Exception exx)
@@ -133,32 +136,32 @@ namespace Gestion_Stock.Models
                             {
                                 if (valPrm[2] == "")
                                 {
-                                    _command.Parameters.Add("@" + valPrm[0], SqlDbType.DateTime).Value = DBNull.Value;
+                                    _command.Parameters.Add("@" + valPrm[0], MySqlDbType.DateTime).Value = DBNull.Value;
                                 }
                                 else
                                 {
-                                    _command.Parameters.Add("@" + valPrm[0], SqlDbType.DateTime).Value = Convert.ToDateTime(valPrm[2]);
+                                    _command.Parameters.Add("@" + valPrm[0], MySqlDbType.DateTime).Value = Convert.ToDateTime(valPrm[2]);
                                 }
                             }
                             else if (valPrm[1] == "string")
                             {
-                                _command.Parameters.Add("@" + valPrm[0], SqlDbType.NVarChar).Value = valPrm[2];
+                                _command.Parameters.Add("@" + valPrm[0], MySqlDbType.VarString).Value = valPrm[2];
                             }
                             else if (valPrm[1] == "int")
                             {
                                 if (valPrm[2].Trim() == "") valPrm[2] = "0";
-                                _command.Parameters.Add("@" + valPrm[0], SqlDbType.BigInt).Value = valPrm[2];
+                                _command.Parameters.Add("@" + valPrm[0], MySqlDbType.Int64).Value = valPrm[2];
                             }
                             else if (valPrm[1] == "double" || valPrm[1] == "float")
                             {
                                 if (valPrm[2].Trim() == "") valPrm[2] = "0";
-                                _command.Parameters.Add("@" + valPrm[0], SqlDbType.Float).Value = valPrm[2];
+                                _command.Parameters.Add("@" + valPrm[0], MySqlDbType.Float).Value = valPrm[2];
                             }
                         }
                     }
 
-                    _dataAdapter = new MySqlDataAdapter(_command);
-                    _dataAdapter.Fill(dt);
+                    _dataReader = _command.ExecuteReader(); //(_command);
+                    dt.Load(_dataReader);
                 }
             }
             catch (Exception exx)
@@ -196,9 +199,13 @@ namespace Gestion_Stock.Models
             {
                 using (MySqlConnection _sqlConnection = new MySqlConnection(Configs._urlServer))
                 {
-                    _dataAdapter = new MySqlDataAdapter(sql, _sqlConnection);
+                    MySqlCommand cmd = new MySqlCommand(sql, _sqlConnection);
+                   // _dataReader = new MySqlDataReader(sql, _sqlConnection);
                     DataSet ds = new DataSet();
-                    _dataAdapter.Fill(dt);
+                    cmd.Connection.Open();
+                    _dataReader = cmd.ExecuteReader(); //(_command);
+                    dt.Load(_dataReader);
+                    cmd.Connection.Close();
                 }
             }
             catch (Exception ex)
@@ -268,18 +275,18 @@ namespace Gestion_Stock.Models
                             if (valPrm[1] == "date")
                             {
                                 if (valPrm[2] == "")
-                                    _command.Parameters.Add("@" + valPrm[0], SqlDbType.DateTime).Value = DBNull.Value;
+                                    _command.Parameters.Add("@" + valPrm[0], MySqlDbType.DateTime).Value = DBNull.Value;
                                 else
-                                    _command.Parameters.Add("@" + valPrm[0], SqlDbType.DateTime).Value = Convert.ToDateTime(valPrm[2]);
+                                    _command.Parameters.Add("@" + valPrm[0], MySqlDbType.DateTime).Value = Convert.ToDateTime(valPrm[2]);
                             }
                             else if (valPrm[1] == "string")
                             {
-                                _command.Parameters.Add("@" + valPrm[0], SqlDbType.NVarChar).Value = valPrm[2];
+                                _command.Parameters.Add("@" + valPrm[0], MySqlDbType.String).Value = valPrm[2];
                             }
                             else if (valPrm[1] == "int")
                             {
                                 if (valPrm[2].Trim() == "") valPrm[2] = "0";
-                                _command.Parameters.Add("@" + valPrm[0], SqlDbType.BigInt).Value = valPrm[2];
+                                _command.Parameters.Add("@" + valPrm[0], MySqlDbType.Int64).Value = valPrm[2];
                             }
                             else if (valPrm[1] == "double" || valPrm[1] == "float")
                             {
@@ -288,7 +295,7 @@ namespace Gestion_Stock.Models
                                 //if (valPrm[2].IndexOf(',') > 0 && double.TryParse(valPrm[2].Replace(',', '.'), out tmp))
 
                                 if (valPrm[2].Trim() == "") valPrm[2] = "0";
-                                _command.Parameters.Add("@" + valPrm[0], SqlDbType.Float).Value = double.Parse(valPrm[2]);
+                                _command.Parameters.Add("@" + valPrm[0], MySqlDbType.Float).Value = double.Parse(valPrm[2]);
                             }
                         }
                     }
