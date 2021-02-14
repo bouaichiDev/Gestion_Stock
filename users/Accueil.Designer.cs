@@ -72,6 +72,7 @@
             this.commandeToolStripMenuItem.Name = "commandeToolStripMenuItem";
             this.commandeToolStripMenuItem.Size = new System.Drawing.Size(82, 20);
             this.commandeToolStripMenuItem.Text = "Commande";
+            this.commandeToolStripMenuItem.Click += new System.EventHandler(this.commandeToolStripMenuItem_Click);
             // 
             // userToolStripMenuItem
             // 

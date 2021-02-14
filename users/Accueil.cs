@@ -39,5 +39,13 @@ namespace Gestion_Stock.user
         {
 
         }
+
+        private void commandeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            panel1.Controls.Clear();
+            Commande.AccueilCommande objFormcmd = new Commande.AccueilCommande() { Dock = DockStyle.Fill, TopLevel = false, TopMost = false };
+            panel1.Controls.Add(objFormcmd);
+            objFormcmd.Show();
+        }
     }
 }
