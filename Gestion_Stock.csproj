@@ -120,6 +120,12 @@
     <Compile Include="Commande\AccueilCommande.Designer.cs">
       <DependentUpon>AccueilCommande.cs</DependentUpon>
     </Compile>
+    <Compile Include="Commande\ListCommande.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Commande\ListCommande.Designer.cs">
+      <DependentUpon>ListCommande.cs</DependentUpon>
+    </Compile>
     <Compile Include="users\Accueil.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -152,6 +158,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Commande\AccueilCommande.resx">
       <DependentUpon>AccueilCommande.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Commande\ListCommande.resx">
+      <DependentUpon>ListCommande.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="users\Accueil.resx">
       <DependentUpon>Accueil.cs</DependentUpon>
